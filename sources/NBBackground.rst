@@ -31,7 +31,7 @@ The most common strategy to deal with any kind of simulation (static or dynamic,
 The combination of these methods has a complexity of O(N) and a refresh rate that depends on the displacement of the fastest particle. 
 This algorithm is easily thread-parallelized. Others less-used neighbor search strategies have been developed to address specific simulations
 
-.. figure:: images/Verlet.png
+.. figure:: ../../doc_exaNBody/sources/images/Verlet.png
    :width: 250pt
    :alt: map to buried treasure
    :align: center
@@ -39,7 +39,7 @@ This algorithm is easily thread-parallelized. Others less-used neighbor search s
    Figure 1: A method for building neighbor lists using the Verlet lists. `rcut` is the radius cut-off and `rVerlet` is the radius of Verlet.
 
 
-.. figure:: images/LC.png
+.. figure:: ../../doc_exaNBody/sources/images/LC.png
    :width: 250pt
    :alt: map to buried treasure
    :align: center
