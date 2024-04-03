@@ -23,7 +23,7 @@ Spatial domain decomposition and inter-process communications
 The coarsest parallelization level can become the main bottleneck due to network latencies and load imbalance issues.
 To take advantage of this first level of parallelization, the simulation domain is divided into subdomains using an recursive coordinate bisection (RCB) algorithm, as depicted in figure below, assigning one subdomain to each MPI process.
 
-.. figure:: images/inter_process_communications.png
+.. figure:: ../../doc_exaNBody/sources/images/inter_process_communications.png
    :width: 450pt
    :alt: map to buried treasure
    :align: center
@@ -50,7 +50,7 @@ This API offers a set of parallelization templates associated with three types o
 
 When a developer injects a compute function into these templates, computation may be routed to CPU or GPU, as illustrated in figure below. 
 
-.. figure:: images/compute_kernel_sample.png
+.. figure:: ../../doc_exaNBody/sources/images/compute_kernel_sample.png
    :width: 450pt
    :alt: map to buried treasure
    :align: center
@@ -87,7 +87,7 @@ In our model, individual software components are implemented using C++17 and are
 Each component is developed as a class, inheriting from a base class OperatorNode and explicitly declares its input and output slots (data flow connection points). 
 Once compiled, these components are hierarchically assembled at runtime using a Sequential Task Flow (STF), with a YAML syntax, as shown in figure below.
 
-.. figure:: images/yaml_components.png
+.. figure:: ../../doc_exaNBody/sources/images/yaml_components.png
    :width: 450pt
    :alt: map to buried treasure
    :align: center

@@ -63,16 +63,16 @@ Example of yaml code :
      periodic: [false,true,false]
 
 
-.. |ex1start| image:: images/rotating_drum_start.png
+.. |ex1start| image:: ../../doc_exaNBody/sources/images/rotating_drum_start.png
    :width: 300pt
 
-.. |ex1end| image:: images/rotating_drum_end.png
+.. |ex1end| image:: ../../doc_exaNBody/sources/images/rotating_drum_end.png
    :width: 300pt
 
 Example of simple figure :
 --------------------------
 
-.. figure:: images/rotating_drum_start.png
+.. figure:: ../../doc_exaNBody/sources/images/rotating_drum_start.png
    :width: 300pt
    :alt: map to buried treasure
    :align: center

@@ -14,7 +14,7 @@ Software Stack Layers:
 
 #. Application Layer: This layer encapsulates the specific applications built upon the software stack. It provides the interface for users to interact with the functionalities offered by the stack and serves as the platform for N-Body application-specific implementations and functionalities.
 
-.. |exanb-st| image:: images/software_stack.png
+.. |exanb-st| image:: ../../doc_exaNBody/sources/images/software_stack.png
    :width: 500pt
 
 |exanb-st|
