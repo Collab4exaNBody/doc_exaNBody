@@ -42,6 +42,7 @@ Index of command line options to customize configuration block
 .. list-table:: exaNBody configuration options
   :widths: 25 20 30
   :header-rows: 1
+
 * - Option 
   - Value type
   - Default
