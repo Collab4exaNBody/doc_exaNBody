@@ -283,6 +283,7 @@ Harnessing the power of GPU parallelization, ExaNBody provides users with the ab
   * - selectively disable GPU
     - --onika-gpu_disable_filter [ "sim.loop.compute_force.hook_force" , ".*hook_force" ]
     - a list of regular expressions matching operator paths for which GPU execution will be disabled
+    - []
 
 Profiling tools available in exaNBody
 -------------------------------------
@@ -391,7 +392,7 @@ Debug features in exaNBody
 ExaNBody is equipped with a range of debug features tailored to aid developers in the debugging process. This section outlines the comprehensive list of debug functionalities available within ExaNBody, providing developers with essential tools to diagnose and resolve issues effectively. This is an exhaustive list:
 
 .. list-table:: ExaNBody Debug Command Lines
-  :widths: 15 20 20 45
+  :widths: 15 30 30
   :header-rows: 1
 
   * - Type of tools 
