@@ -38,7 +38,9 @@ Command line arguments are converted to a YAML document using the following conv
 
 Index of command line options to customize configuration block
 --------------------------------------------------------------
-# generated with ./exaStamp --help command-line | sed -e 's/ (/\n    - (/g' -e 's/ </\n    - </g' -e 's/^--/  * - --/g' -e 's/ (default: / /g' | tr -d ")<>"
+
+..
+generated with ./exaStamp --help command-line | sed -e 's/ (/\n    - (/g' -e 's/ </\n    - </g' -e 's/^--/  * - --/g' -e 's/ (default: / /g' | tr -d ")<>"
 
 .. list-table:: exaNBody configuration options
   :widths: 25 20 30
