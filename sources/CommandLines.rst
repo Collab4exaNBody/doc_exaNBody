@@ -3,6 +3,33 @@ ExaNBody Command Lines
 
 ExaNBody offers a range of command-line options to facilitate debugging, profiling, and configuring OpenMP settings, providing users with enhanced control and flexibility over the behavior and performance of the code. These options enable developers to diagnose issues, analyze performance characteristics, and optimize parallel execution on multicore architectures. From enabling debug mode to specifying thread affinity and scheduling policies, users can tailor ExaNBody's behavior to suit their specific requirements and achieve optimal performance. This section outlines the various command-line options available, empowering users to leverage ExaNBody's capabilities effectively.
 
+Command line and input file interaction
+---------------------------------------
+
+exaNBody based apps treat command line the same way as input files, the command line just being YAML elements expressed with another syntax.
+YAML docuement, as processed by an exaNBody app is formed by a set of included files (either implicitly or explcitly through the 'includes' list) and the user input file passed
+as the first argument of command line, as in the following exemple :
+.. code-block::bash
+  ./exaStamp myinput.msp
+
+The YAML docuement built from user input and its included files have 3 reserved dictionary entries, namely 'configuration', reserved for configuring execution sub-system, 'includes', reserved to include other YAML files
+and 'simulation' wich is interpreted as the the root batch operator representing the whole simulation to run.
+
+When it comes to interpreting command line arguments, the exaNBody based application processes it abuild a YAML document out of it, merging it with the user defined YAML docuement as if it would have been included after all other included files.
+Command line arguments are converted to a YAML document using the following conventions :
+  * If argument starts with '--set-', it is understood as a generic YAML dictionary entry, and each '-' is interpreted as a marker for an inner dictionary entry.
+    The following value is understood as beeing the value associated with the given dictionary key. If no value found after a '--set-xxx' style argument, the value 'true' is implicitly used.
+    For instance, --set-global-rcut_inc '1.2 m' is equivalent to including a YAML file wich contains
+    .. code-block::yaml
+      global:
+        rcut_inc: 1.2 m
+  * If a command line argument starts with --xxx with xxx being anything but 'set' , then similar rules apply as for the --set-xxx args, but the YAML block is understood as being a dictionary entry inside the 'configuration' block.
+    For instance, --logging-debug true is equivalent to inclusion of a YAML file containing :
+    .. code-block::yaml
+      configuration:
+        logging:
+          debug: true
+
 Tune your run with OpenMP
 -------------------------
 
