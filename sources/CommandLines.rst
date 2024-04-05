@@ -7,18 +7,20 @@ Command line and input file interaction
 ---------------------------------------
 
 exaNBody based apps treat command line the same way as input files, the command line just being YAML elements expressed with another syntax.
-YAML docuement, as processed by an exaNBody app is formed by a set of included files (either implicitly or explcitly through the 'includes' list) and the user input file passed
+YAML docuement, as processed by an exaNBody app is formed by a set of included files (either implicitly or explcitly through the **includes** list) and the user input file passed
 as the first argument of command line, as in the following exemple :
-.. code-block::bash
+
+.. code-block:: bash
+
   ./exaStamp myinput.msp
 
-The YAML document built from user input and its included files have 3 reserved dictionary entries, namely 'configuration', reserved for configuring execution sub-system, 'includes', reserved to include other YAML files
-and 'simulation' wich is interpreted as the the root batch operator representing the whole simulation to run.
+The YAML document built from user input and its included files have 3 reserved dictionary entries, namely **configuration** reserved for configuring execution sub-system, **includes** reserved to include other YAML files
+and **simulation** wich is interpreted as the the root batch operator representing the whole simulation to run.
 
 When it comes to interpreting command line arguments, the exaNBody based application processes it abuild a YAML document out of it, merging it with the user defined YAML docuement as if it would have been included after all other included files.
 Command line arguments are converted to a YAML document using the following conventions :
 
-* If argument starts with '--set-', it is understood as a generic YAML dictionary entry, and each '-' is interpreted as a marker for an inner dictionary entry. The following value is understood as beeing the value associated with the given dictionary key. If no value found after a '--set-xxx' style argument, the value 'true' is implicitly used. For instance, --set-global-rcut_inc '1.2 m' is equivalent to including a YAML file wich contains
+* If argument starts with **--set-**, it is understood as a generic YAML dictionary entry, and each '-' is interpreted as a marker for an inner dictionary entry. The following value is understood as beeing the value associated with the given dictionary key. If no value found after a **--set-xxx** style argument, the value **true** is implicitly used. For instance, **--set-global-rcut_inc '1.2 m'** is equivalent to including a YAML file wich contains
 
 .. code-block:: yaml
 
