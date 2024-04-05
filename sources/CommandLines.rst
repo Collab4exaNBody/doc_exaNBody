@@ -28,8 +28,8 @@ Command line arguments are converted to a YAML document using the following conv
 .. code-block::yaml
 
   configuration:
-  logging:
-    debug: true
+    logging:
+      debug: true
 
 
 Tune your run with OpenMP
