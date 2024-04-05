@@ -43,184 +43,183 @@ Index of command line options to customize configuration block
   :widths: 25 20 30
   :header-rows: 1
 
-* - Option 
-  - Value type
-  - Default
-* - --logging-parallel
-  - <bool>
-  - false
-* - --logging-debug
-  - <bool>
-  - false
-* - --logging-log_file
-  - <std::string>
-  - ""
-* - --logging-err_file
-  - <std::string>
-  - ""
-* - --logging-dbg_file
-  - <std::string>
-  - ""
-* - --profiling-resmem
-  - <bool>
-  - false
-* - --profiling-exectime
-  - <bool>
-  - false
-* - --profiling-summary
-  - <bool>
-  - false
-* - --profiling-filter
-  - <StringVector>
-  - {}
-* - --profilingtrace-enable
-  - <bool>
-  - false
-* - --profilingtrace-format
-  - <std::string>
-  - "yaml"
-* - --profilingtrace-file
-  - <std::string>
-  - "trace"
-* - --profilingtrace-color
-  - <std::string>
-  - "operator"
-* - --profilingtrace-total
-  - <bool>
-  - false
-* - --profilingtrace-idle
-  - <bool>
-  - true
-* - --profilingtrace-trigger
-  - <std::string>
-  - ""
-* - --profilingtrace-trigger_interval
-  - <IntVector>
-  - {}
-* - --profilingtrace-idle_resolution
-  - <long>
-  - 8192
-* - --profilingtrace-idle_smoothing
-  - <long>
-  - 32
-* - --debug-plugins
-  - <bool>
-  - false
-* - --debug-config
-  - <bool>
-  - false
-* - --debug-yaml
-  - <bool>
-  - false
-* - --debug-graph
-  - <bool>
-  - false
-* - --debug-ompt
-  - <bool>
-  - false
-* - --debug-graph_addr
-  - <bool>
-  - false
-* - --debug-graph_lod
-  - <int>
-  - 1
-* - --debug-graph_fmt
-  - <std::string>
-  - "console"
-* - --debug-graph_rsc
-  - <bool>
-  - false
-* - --debug-files
-  - <bool>
-  - false
-* - --debug-rng
-  - <std::string>
-  - ""
-* - --debug-graph_filter
-  - <StringVector>
-  - {}
-* - --debug-filter
-  - <StringVector>
-  - {}
-* - --debug-particle
-  - <UInt64Vector>
-  - {}
-* - --debug-particle_nbh
-  - <bool>
-  - false
-* - --debug-particle_ghost
-  - <bool>
-  - false
-* - --debug-fpe
-  - <bool>
-  - false
-* - --debug-verbose
-  - <int>
-  - 0
-* - --debug-graph_exec
-  - <bool>
-  - false
-* - --onika-parallel_task_core_mult
-  - <int>
-  - ONIKA_TASKS_PER_CORE
-* - --onika-parallel_task_core_add
-  - <int>
-  - 0
-* - --onika-gpu_sm_mult
-  - <int>
-  - ONIKA_CU_MIN_BLOCKS_PER_SM
-* - --onika-gpu_sm_add
-  - <int>
-  - 0
-* - --onika-gpu_block_size
-  - <int>
-  - ONIKA_CU_MAX_THREADS_PER_BLOCK
-* - --onika-gpu_disable_filter
-  - <StringVector>
-  - {}
-* - --nogpu
-  - <bool>
-  - false
-* - --mpimt
-  - <bool>
-  - true
-* - --pinethreads
-  - <bool>
-  - false
-* - --threadrotate
-  - <int>
-  - 0
-* - --omp_num_threads
-  - <int>
-  - -1
-* - --omp_max_nesting
-  - <int>
-  - -1
-* - --omp_nested
-  - <bool>
-  - false
-* - --plugin_dir
-  - <std::string>
-  - USTAMP_PLUGIN_DIR
-* - --plugin_db
-  - <std::string>
-  - ""
-* - --plugins
-  - <StringVector>
-  - {}
-* - --generate_plugins_db
-  - <bool>
-  - false
-* - --help
-  - <std::string>
-  - ""
-* - --run_unit_tests
-  - <bool>
-  - false
-* - --set
-  - <YAML::Node>
-  - 
-
+  * - Option 
+    - Value type
+    - Default
+  * - --logging-parallel
+    - <bool>
+    - false
+  * - --logging-debug
+    - <bool>
+    - false
+  * - --logging-log_file
+    - <std::string>
+    - ""
+  * - --logging-err_file
+    - <std::string>
+    - ""
+  * - --logging-dbg_file
+    - <std::string>
+    - ""
+  * - --profiling-resmem
+    - <bool>
+    - false
+  * - --profiling-exectime
+    - <bool>
+    - false
+  * - --profiling-summary
+    - <bool>
+    - false
+  * - --profiling-filter
+    - <StringVector>
+    - {}
+  * - --profilingtrace-enable
+    - <bool>
+    - false
+  * - --profilingtrace-format
+    - <std::string>
+    - "yaml"
+  * - --profilingtrace-file
+    - <std::string>
+    - "trace"
+  * - --profilingtrace-color
+    - <std::string>
+    - "operator"
+  * - --profilingtrace-total
+    - <bool>
+    - false
+  * - --profilingtrace-idle
+    - <bool>
+    - true
+  * - --profilingtrace-trigger
+    - <std::string>
+    - ""
+  * - --profilingtrace-trigger_interval
+    - <IntVector>
+    - {}
+  * - --profilingtrace-idle_resolution
+    - <long>
+    - 8192
+  * - --profilingtrace-idle_smoothing
+    - <long>
+    - 32
+  * - --debug-plugins
+    - <bool>
+    - false
+  * - --debug-config
+    - <bool>
+    - false
+  * - --debug-yaml
+    - <bool>
+    - false
+  * - --debug-graph
+    - <bool>
+    - false
+  * - --debug-ompt
+    - <bool>
+    - false
+  * - --debug-graph_addr
+    - <bool>
+    - false
+  * - --debug-graph_lod
+    - <int>
+    - 1
+  * - --debug-graph_fmt
+    - <std::string>
+    - "console"
+  * - --debug-graph_rsc
+    - <bool>
+    - false
+  * - --debug-files
+    - <bool>
+    - false
+  * - --debug-rng
+    - <std::string>
+    - ""
+  * - --debug-graph_filter
+    - <StringVector>
+    - {}
+  * - --debug-filter
+    - <StringVector>
+    - {}
+  * - --debug-particle
+    - <UInt64Vector>
+    - {}
+  * - --debug-particle_nbh
+    - <bool>
+    - false
+  * - --debug-particle_ghost
+    - <bool>
+    - false
+  * - --debug-fpe
+    - <bool>
+    - false
+  * - --debug-verbose
+    - <int>
+    - 0
+  * - --debug-graph_exec
+    - <bool>
+    - false
+  * - --onika-parallel_task_core_mult
+    - <int>
+    - ONIKA_TASKS_PER_CORE
+  * - --onika-parallel_task_core_add
+    - <int>
+    - 0
+  * - --onika-gpu_sm_mult
+    - <int>
+    - ONIKA_CU_MIN_BLOCKS_PER_SM
+  * - --onika-gpu_sm_add
+    - <int>
+    - 0
+  * - --onika-gpu_block_size
+    - <int>
+    - ONIKA_CU_MAX_THREADS_PER_BLOCK
+  * - --onika-gpu_disable_filter
+    - <StringVector>
+    - {}
+  * - --nogpu
+    - <bool>
+    - false
+  * - --mpimt
+    - <bool>
+    - true
+  * - --pinethreads
+    - <bool>
+    - false
+  * - --threadrotate
+    - <int>
+    - 0
+  * - --omp_num_threads
+    - <int>
+    - -1
+  * - --omp_max_nesting
+    - <int>
+    - -1
+  * - --omp_nested
+    - <bool>
+    - false
+  * - --plugin_dir
+    - <std::string>
+    - USTAMP_PLUGIN_DIR
+  * - --plugin_db
+    - <std::string>
+    - ""
+  * - --plugins
+    - <StringVector>
+    - {}
+  * - --generate_plugins_db
+    - <bool>
+    - false
+  * - --help
+    - <std::string>
+    - ""
+  * - --run_unit_tests
+    - <bool>
+    - false
+  * - --set
+    - <YAML::Node>
+    - 
 
 
 Tune your run with OpenMP
