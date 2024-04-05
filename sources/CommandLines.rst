@@ -42,7 +42,7 @@ Index of command line options to customize configuration block
 ..
   generated with ./exaStamp --help command-line | sed -e 's/ (/\n    - (/g' -e 's/ </\n    - </g' -e 's/^--/  * - --/g' -e 's/ (default: / /g' | tr -d ")<>"
 
-.. list-table:: exaNBody configuration options
+.. list-table:: 
   :widths: 25 20 30
   :header-rows: 1
 
