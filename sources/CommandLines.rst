@@ -397,19 +397,18 @@ ExaNBody is equipped with a range of debug features tailored to aid developers i
 
   * - Type of tools 
     - Command line
-    - Architecture
     - Description
-  * - Cuda threads size
-    - TODO
-    - GPU
-    - Set the number of cuda threads to 1 on GPU.
+  * - Simulation graph
+    - --debug-graph [true|false]
+    - Prints simulation graph as built after user input file, included files and command lines are processed
+  * - user input YAML document
+    - --debug-yaml [true|false]
+    - Prints final YAML document used by application after user input file, included files and command lines are merged
   * - Output ldbg
     - --logging-debug true
-    - CPU
     - Print debug logs added in `ldbg <<`
   * - filtering debug output
     - --debug-filter ["regexp1","regexp2",...]
-    - CPU
     - Filters which operator nodes output debug messges with ldbg<<"...". regexp is a regular expression matching operator pathname, i.e. it's name within block and sub block, for instance "sim.first_iteration.compute_force.lj_force" can be filtered differently than sim.compute_loop.compute_force.lj_force". alternatively, adding a filter expression such as ".*lj_force" will activate debug messages for all instances of lj_force operator.
 
 How to use output ldbg:
