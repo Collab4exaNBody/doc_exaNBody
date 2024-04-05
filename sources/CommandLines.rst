@@ -47,178 +47,178 @@ Index of command line options to customize configuration block
     - Value type
     - Default
   * - --logging-parallel
-    - <bool>
+    - bool
     - false
   * - --logging-debug
-    - <bool>
+    - bool
     - false
   * - --logging-log_file
-    - <std::string>
+    - std::string
     - ""
   * - --logging-err_file
-    - <std::string>
+    - std::string
     - ""
   * - --logging-dbg_file
-    - <std::string>
+    - std::string
     - ""
   * - --profiling-resmem
-    - <bool>
+    - bool
     - false
   * - --profiling-exectime
-    - <bool>
+    - bool
     - false
   * - --profiling-summary
-    - <bool>
+    - bool
     - false
   * - --profiling-filter
-    - <StringVector>
+    - StringVector
     - {}
   * - --profilingtrace-enable
-    - <bool>
+    - bool
     - false
   * - --profilingtrace-format
-    - <std::string>
+    - std::string
     - "yaml"
   * - --profilingtrace-file
-    - <std::string>
+    - std::string
     - "trace"
   * - --profilingtrace-color
-    - <std::string>
+    - std::string
     - "operator"
   * - --profilingtrace-total
-    - <bool>
+    - bool
     - false
   * - --profilingtrace-idle
-    - <bool>
+    - bool
     - true
   * - --profilingtrace-trigger
-    - <std::string>
+    - std::string
     - ""
   * - --profilingtrace-trigger_interval
-    - <IntVector>
+    - IntVector
     - {}
   * - --profilingtrace-idle_resolution
-    - <long>
+    - long
     - 8192
   * - --profilingtrace-idle_smoothing
-    - <long>
+    - long
     - 32
   * - --debug-plugins
-    - <bool>
+    - bool
     - false
   * - --debug-config
-    - <bool>
+    - bool
     - false
   * - --debug-yaml
-    - <bool>
+    - bool
     - false
   * - --debug-graph
-    - <bool>
+    - bool
     - false
   * - --debug-ompt
-    - <bool>
+    - bool
     - false
   * - --debug-graph_addr
-    - <bool>
+    - bool
     - false
   * - --debug-graph_lod
-    - <int>
+    - int
     - 1
   * - --debug-graph_fmt
-    - <std::string>
+    - std::string
     - "console"
   * - --debug-graph_rsc
-    - <bool>
+    - bool
     - false
   * - --debug-files
-    - <bool>
+    - bool
     - false
   * - --debug-rng
-    - <std::string>
+    - std::string
     - ""
   * - --debug-graph_filter
-    - <StringVector>
+    - StringVector
     - {}
   * - --debug-filter
-    - <StringVector>
+    - StringVector
     - {}
   * - --debug-particle
-    - <UInt64Vector>
+    - UInt64Vector
     - {}
   * - --debug-particle_nbh
-    - <bool>
+    - bool
     - false
   * - --debug-particle_ghost
-    - <bool>
+    - bool
     - false
   * - --debug-fpe
-    - <bool>
+    - bool
     - false
   * - --debug-verbose
-    - <int>
+    - int
     - 0
   * - --debug-graph_exec
-    - <bool>
+    - bool
     - false
   * - --onika-parallel_task_core_mult
-    - <int>
+    - int
     - ONIKA_TASKS_PER_CORE
   * - --onika-parallel_task_core_add
-    - <int>
+    - int
     - 0
   * - --onika-gpu_sm_mult
-    - <int>
+    - int
     - ONIKA_CU_MIN_BLOCKS_PER_SM
   * - --onika-gpu_sm_add
-    - <int>
+    - int
     - 0
   * - --onika-gpu_block_size
-    - <int>
+    - int
     - ONIKA_CU_MAX_THREADS_PER_BLOCK
   * - --onika-gpu_disable_filter
-    - <StringVector>
+    - StringVector
     - {}
   * - --nogpu
-    - <bool>
+    - bool
     - false
   * - --mpimt
-    - <bool>
+    - bool
     - true
   * - --pinethreads
-    - <bool>
+    - bool
     - false
   * - --threadrotate
-    - <int>
+    - int
     - 0
   * - --omp_num_threads
-    - <int>
+    - int
     - -1
   * - --omp_max_nesting
-    - <int>
+    - int
     - -1
   * - --omp_nested
-    - <bool>
+    - bool
     - false
   * - --plugin_dir
-    - <std::string>
+    - std::string
     - USTAMP_PLUGIN_DIR
   * - --plugin_db
-    - <std::string>
+    - std::string
     - ""
   * - --plugins
-    - <StringVector>
+    - StringVector
     - {}
   * - --generate_plugins_db
-    - <bool>
+    - bool
     - false
   * - --help
-    - <std::string>
+    - std::string
     - ""
   * - --run_unit_tests
-    - <bool>
+    - bool
     - false
   * - --set
-    - <YAML::Node>
+    - YAML::Node
     - 
 
 
