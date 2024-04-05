@@ -253,8 +253,12 @@ Harnessing the power of OpenMP parallelization, ExaNBody provides users with the
     - -1
   * - Nested parallelism within OpenMP
     - --omp_nested [true/false]
-    - Enables or disables nested parallelism within OpenMP, allowing parallel regions to spawn additional parallel regions.
+    - Enables or disables nested parallelism within OpenMP, allowing parallel regions to spawn additional parallel regions. true may be replaced by an integer indicating how many nested parallelism levels are allowed.
     - false
+  * - MPI_THREAD_MULTIPLE feature request
+    - --mpimt [true|false]
+    - If set to true, requires that MPI implementation supports MPI_THREAD_MULTIPLE feature
+    - true
 
 Tune GPU execution options
 --------------------------
@@ -277,40 +281,39 @@ Harnessing the power of GPU parallelization, ExaNBody provides users with the ab
     - --onika-gpu_block_size N
     - sets default thread block size to N.
     - 128
+  * - selectively disable GPU
+    - --onika-gpu_disable_filter [ "sim.loop.compute_force.hook_force" , ".*hook_force" ]
+    - a list of regular expressions matching operator paths for which GPU execution will be disabled
 
 Profiling tools available in exaNBody
 -------------------------------------
 
-ExaNBody offers a comprehensive suite of performance profiling tools designed to empower users in analyzing and optimizing their parallel applications. These tools provide valuable insights into runtime behavior, resource utilization, and performance bottlenecks, enabling developers to fine-tune their code for maximum efficiency. From CPU profiling to memory analysis, ExaNBody's profiling tools offer a range of capabilities to meet diverse profiling needs. This section introduces the profiling tools available within ExaNBody, equipping users with the means to gain deeper understanding and enhance the performance of their parallel applications.
+ExaNBody offers a comprehensive suite of performance profiling tools designed to empower users in analyzing and optimizing their parallel applications. These tools provide valuable insights into runtime behavior, resource utilization, and performance bottlenecks, enabling developers to fine-tune their code for maximum efficiency. From CPU profiling to memory analysis, ExaNBody's profiling tools offer a range of capabilities to meet diverse profiling needs. This section introduces the profiling tools available within ExaNBody, equipping users with the means to gain deeper understanding and enhance the performance of their parallel applications. some profiling tools are accessible through conifguration flags, others need to insert specific operator nodes in simulation description.
 
 .. list-table:: ExaNBody Profiling Tools Command Lines
   :widths: 15 20 20 45
   :header-rows: 1
 
   * - Type of tools 
-    - Command line
-    - Operator
+    - Command line / Operator
+    - Defaults
     - Description
-  * - Timers 
-    - --profiling-summary true
-    - profiling : {summary: true }
-    - This tool Displays timer informtaions for every operators.
-  * - VITE Trace
-    - --profilingtrace-file true 
-    - NULL
-    - This tool generates a VITE trace on CPU (not available with GPU).
-  * - Memory footprint 
-    - TODO
-    - NULL
-    - This tool displays the memory footprint of every data storage used during the execution.
-  * - nvtx instructions 
-    - By default
-    - By default
-    - Instructions nvtxtoolpush and nvtxtoolpop are included around every operator->execute()
-  * - Performance adviser
-    - TODO 
+  * - Timers (configuration flag)
+    - --profiling-summary [true|false]
+    - true
+    - Displays timer informtaions for every bottom level or batch operator nodes in simaulation graph. if two percentages are shown, second one is the portion of time spent in the nearest enclosing loop batch operator (i.e. compute_loop)
+  * - VITE Trace (configuration flag)
+    - --profilingtrace-file [true|false]
+    - ""
+    - Generates a VITE trace describing CPU threads occupation (not available GPU threads).
+  * - Resident memory (configuration flag)
+    - --profiling-resmem [true|false]
+    - false 
+    - Displays resident memory evolution during the execution. Helps tracking of memory leaks.
+  * - Performance adviser (operator)
+    - not present by default, can be inserted after initialization phase or after first iteration, i.e. using +first_iteration: [ perfomance_advisor ]
     - performance_adviser: { verbose: true }
-    - This tool displays some tips according to your simulation (fit cell size, your number of MPI processes ...)
+    - Displays some tips about parameters to be tweaked to improve your simulations performance (cell size, number of MPI processes, etc.)
 
 
 Using Timers with MPI and GPU
