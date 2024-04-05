@@ -27,7 +27,7 @@ Command line arguments are converted to a YAML document using the following conv
   global:
     rcut_inc: 1.2 m
 
-* If a command line argument starts with --xxx with xxx being anything but 'set' , then similar rules apply as for the --set-xxx args, but the YAML block is understood as being a dictionary entry inside the 'configuration' block. For instance, --logging-debug true is equivalent to inclusion of a YAML file containing :
+* If a command line argument starts with **--xxx** with xxx being anything but 'set' , then similar rules apply as for the **--set-xxx** args, but the YAML block is understood as being a dictionary entry inside the **configuration** block. For instance, **--logging-debug true** is equivalent to inclusion of a YAML file containing :
 
 .. code-block:: yaml
 
