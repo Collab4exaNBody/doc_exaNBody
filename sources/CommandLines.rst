@@ -17,7 +17,7 @@ as the first argument of command line, as in the following exemple :
 The YAML document built from user input and its included files have 3 reserved dictionary entries, namely **configuration** reserved for configuring execution sub-system, **includes** reserved to include other YAML files
 and **simulation** wich is interpreted as the the root batch operator representing the whole simulation to run.
 
-When it comes to interpreting command line arguments, the exaNBody based application parses it and internally converts it to a YAML document, merged with previously read YAML inputs (user input file and included files). Conversion from command line argument to YAML proceeds ads follows :
+When it comes to interpreting command line arguments, the exaNBody based application parses it and internally converts it to a YAML document, merged with previously read YAML inputs (user input file and included files). Conversion from command line argument to YAML proceeds as follows :
 
 * If argument starts with **--set-**, it is understood as a generic YAML dictionary entry, and each '-' is interpreted as a marker for an inner dictionary entry. The following value is understood as beeing the value associated with the given dictionary key. If no value found after a **--set-xxx** style argument, the value **true** is implicitly used. For instance, **--set-global-rcut_inc '1.2 m'** is equivalent to including a YAML file wich contains
 
