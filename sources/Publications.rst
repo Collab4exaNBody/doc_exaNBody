@@ -21,6 +21,8 @@ Cieren, E., Colombet, L., Pitoiset, S., & Namyst, R. (2014). ExaStamp: A paralle
 
 Field Physics / Molecular Dynamics:
 
+Soulard, L., Durand, O., Burie, J. R., & Babilotte, K. (2024). Micro-jetting: Areal density calculation from a triangular groove. Journal of Applied Physics, 135(20).
+
 Soulard, L. (2023). Micro-jetting: A semi-analytical model to calculate the velocity and density of the jet from a triangular groove. Journal of Applied Physics, 133(8).
 
 Soulard, L., Carrard, T., & Durand, O. (2022). Molecular dynamics study of the impact of a solid drop on a solid target. Journal of Applied Physics, 131(13).
