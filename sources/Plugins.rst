@@ -13,6 +13,41 @@ Operator b
 Operator c
 ^^^^^^^^^^
 
+Core features
+-------------
+
+Independently from any loaded plugins, a set of core feature are always available for use.
+This includes, but is not limited to, domain description, particle grid, mpi core features, and more.
+
+Domain
+^^^^^^
+
+The domain struct holds information about simulation domain size and properties. It is initialized by an operator named "domain" in the YAML input file.
+Main domain properties are :
+
+- domain lower and upper bounds
+- cell size
+- cell grid dimensions
+- boundary condtions
+
+Here after is an exemple of domain initialization using the "domain" operator :
+
+.. code-block:: yaml
+
+  domain:
+    cell_size: 10.0 ang
+    bounds: [ [ 0.0 , 0.0 , 0.0 ] , [ 10.0 , 10.0 , 10.0 ] ]
+    periodic: [false,true,true]
+    mirror: [ X- ]
+
+
+Periodic indicates which directions have periodic boundary conditions. Mirror tells wich sides have mirror (reflective) boundary conditions.
+A reflective mirror side can be applied on any side of the domain box. A direction with at leat one mirror boundary cannot be periodic, and vice-versa.
+As an exemple, if X direction is not periodic, it can have mirror condition and the lower end (X-) and/or the upper end (X+). If user set X to be periodic and add a X-/X+
+mirror, X periodicity is disabled automatically. Finally, mirror property is a list of sides on which mirror conditions are applied, among X-, X+, X, Y-, Y+, Y, Z-, Z+ and Z.
+mirror sides X is a shortcut for enabling X- and X+ at the same time, so is Y and Z.
+
+
 Logic
 -----
 
