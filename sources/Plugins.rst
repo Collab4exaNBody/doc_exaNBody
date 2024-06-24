@@ -29,7 +29,7 @@ Cartesian Field Grid
 ^^^^^^^^^^^^^^^^^^^^
 
 * Operator Name: ``set_cell_values``
-* Description: This operator assigns a value to a point on a Cartesian grid, such as the velocity of a fluid. This operator can also be used to refine the grid and define different behaviors in different spatial regions. 
+* Description: This operator initializes values of a specific cell value field, and creates it if needed. optionally, initialization can be bounded to a specified region, the rest of field beeing set to all 0. This operator can also be used to refine the grid.
 * Parameters:
 
   * region: Region of the field where the value is to be applied.
