@@ -60,6 +60,28 @@ ParticleNeighbors
 GridCellParticles
 -----------------
 
+Cartesian Field Grid
+^^^^^^^^^^^^^^^^^^^^
+
+* Operator Name: ``set_cell_values``
+* Description: This operator initializes values of a specific cell value field, and creates it if needed. optionally, initialization can be bounded to a specified region, the rest of field beeing set to all 0. This operator can also be used to refine the grid.
+* Parameters:
+
+  * region: Region of the field where the value is to be applied.
+  * grid_subdiv: Number of (uniform) subdivisions required for this field. Note that the refinement is an octree.
+  * field_name: Name of the field.
+  * value: List of the values affected to the field.
+
+YAML example:
+
+.. code-block:: yaml
+
+  - set_cell_values:
+     field_name: jet
+     grid_subdiv: 30
+     value: [1, 0, 0, 20]
+     region: GEYSERE
+
 IO
 --
 
@@ -75,7 +97,7 @@ To utilize this additional storage, you need to use the data structure *ExtraDyn
 
   template<typename ItemType> struct CellExtraDynamicDataStorageT
   using UIntType = uint64_t;
-  using InfoType = std::tuple<UIntType,UIntType, UIntType>;
+  using InfoType = ExtraStorageInfo;
   onika::memory::CudaMMVector<InfoType> m_info; /**< Info vector storing indices of the [start, number of items, particle id] of each cell's extra dynamic data in m_data. */
   onika::memory::CudaMMVector<ItemType> m_data; /**< Data vector storing the extra dynamic data for each cell. */
 
