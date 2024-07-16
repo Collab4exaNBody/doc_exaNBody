@@ -35,6 +35,67 @@ When it comes to interpreting command line arguments, the exaNBody based applica
       debug: true
 
 
+Commands 'Help' for your application
+------------------------------------
+
+`exaNBody` provides several help commands to assist users in understanding the available command lines, plugins, and operators. Below are the descriptions and usage of each help command.
+
+General Help Command
+^^^^^^^^^^^^^^^^^^^^
+
+To display the general help information:
+
+.. code-block:: bash
+
+   ./exaDEM --help
+
+This command shows the available help command lines.
+
+Command-Line Options Help
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To display the command line options available:
+
+.. code-block:: bash
+
+   ./exaDEM --help command-line
+
+This command lists the command line options you can use to customize the configuration block. See the next section named "Index of command line options to customize configuration block" for detailed information.
+
+Plugins Help
+^^^^^^^^^^^^
+
+To print all operators and plugins available in your application:
+
+.. code-block:: bash
+
+   ./exaDEM --help plugins
+
+This command prints every operator and plugin available in `exaNBody`.
+
+Show Plugins Help
+^^^^^^^^^^^^^^^^
+
+To show detailed information for every operator, including descriptions and slot operators:
+
+.. code-block:: bash
+
+   ./exaDEM --help show-plugins
+
+This command provides detailed information for all operators, including their descriptions and slot operators.
+
+Operator-Specific Help
+^^^^^^^^^^^^^^^^^^^^^^
+
+To show details for a specific operator, including its description and slot operators:
+
+.. code-block:: bash
+
+   ./exaDEM --help [operator-name]
+
+Replace `[operator-name]` with the name of the operator you want details for.
+
+
 Index of command line options to customize configuration block
 --------------------------------------------------------------
 
