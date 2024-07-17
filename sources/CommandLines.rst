@@ -74,7 +74,7 @@ To print all operators and plugins available in your application:
 This command prints every operator and plugin available in `exaNBody`.
 
 Show Plugins Help
-^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^
 
 To show detailed information for every operator, including descriptions and slot operators:
 
