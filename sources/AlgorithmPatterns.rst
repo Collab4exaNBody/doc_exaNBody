@@ -210,6 +210,9 @@ This is the first specialized algorithmic pattern for particle systems. Therefor
     }
   }
 
+.. note::
+
+To improve the performance of Compute Cell Particles, you can choose to run it only on non-empty cells, meaning cells that contain at least one particle. This feature is particularly useful in DEM (Discrete Element Method), where it is common to encounter a significant number of empty cells. To use this feature, you can rely on the default parameters 'filled_cells', which is a list containing the indexes of the non-empty cells, and 'number_filled_cells', which indicates the number of non-empty cells.
 
 
 Reduce Cell Particles
