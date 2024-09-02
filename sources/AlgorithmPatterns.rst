@@ -302,7 +302,7 @@ This example demonstrates advanced parallel computation techniques within a part
 
 .. note::
 
-	To improve the performance of Compute Cell Particles, you can choose to run it only on non-empty cells, meaning cells that contain at least one particle. This feature is particularly useful in DEM (Discrete Element Method), where it is common 		to encounter a significant number of empty cells. To use this feature, you can rely on the default parameters `cells_idx`, which is a list containing the indexes of the non-empty cells, and `n_cells`, which indicates the number of non-empty cells.
+	To improve the performance of Reduce Cell Particles, you can choose to run it only on non-empty cells, meaning cells that contain at least one particle. This feature is particularly useful in DEM (Discrete Element Method), where it is common 		to encounter a significant number of empty cells. To use this feature, you can rely on the default parameters `cells_idx`, which is a list containing the indexes of the non-empty cells, and `n_cells`, which indicates the number of non-empty cells.
 
 
 Compute Pair Interaction
