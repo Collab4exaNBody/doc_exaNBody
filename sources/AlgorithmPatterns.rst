@@ -106,8 +106,8 @@ The final step is to launch the parallel operation in the code of our component:
 
 
 
-Asynchrone usage
-^^^^^^^^^^^^^^^^
+Asynchronous parallel execution
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In the following example, we are still using the simplest version of `block_parallel_for`. Optional parameters can be added to control asynchronicity or even disable execution on the `GPU`.
 
@@ -144,7 +144,41 @@ If the execution context allows it, the parallel operation will proceed in the b
 
 .. warning::
 
-  The operation is asynchronous only if the execution context permits it. Otherwise, it will proceed synchronously and complete before the `block_parallel_for` function returns. In such cases, calling `control->wait()` will simply have no effect.
+  The operation is asynchronous only if the execution context permits it. Otherwise, it will proceed synchronously and complete before the `block_parallel_for` function returns. In such cases, calling `control->wait()` will simply have no effect. When a parallel operation runs on the Cuda or HIP backend, asynchronous operations are always possible, thanks to the execution stream features supported by these backends. When a parallel operation runs on the OpenMP backend, real asynchronism depends on wether current executing OperatorNode is in a symetric parallel or task based OpenMP context. The default behavior for an OperatorNode is to run in a symetric parallel OpenMP context. This can be different when an encapsulating batch OperatorNode has been configured to switch to task mode OpenMP parallel execution (See batch configuration section).
+
+
+Concurrent parallel executions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In the following example, we demonstrate how to run several parallel operations asynchronously, optionally running some of them concurrently.
+
+.. code-block:: cpp
+
+  namespace exaStamp 
+  {
+    class MyValueAdd : public OperatorNode
+    {
+      ADD_SLOT(Array2D, my_array, INPUT, REQUIRED);
+      ADD_SLOT(double, my_value, INPUT, 1.0);
+  public:
+      inline void execute() override final {
+        size_t cols = my_array->columns();
+        size_t rows = my_array->rows();
+        bool enable_gpu = (cols * rows) > 1000;     // enable GPU execution only if the matrix has more than 1000 values
+        ValueAddFunctor func = { my_array->data(), cols, *my_value };
+        auto control = onika::parallel::block_parallel_for(
+                         rows
+                       , func
+                       , parallel_execution_context()
+                       , enable_gpu                    // enable or disable GPU execution
+                       , true                          // request asynchronous execution
+                       );
+        std::cout << "Meanwhile, the parallel operation is executing..." << std::endl;
+        control->wait();                               // wait for the operation to complete and results to be ready to read
+        std::cout << "Parallel operation completed!" << std::endl;
+      }
+    };
+  }
 
 
 Compute Cell Particles
