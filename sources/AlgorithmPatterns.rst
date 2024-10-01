@@ -168,31 +168,46 @@ In the following example, we demonstrate how to run several parallel operations 
         bool enable_gpu = (cols * rows) > 1000;     // enable GPU execution only if the matrix has more than 1000 values
         ValueAddFunctor add_func = { my_array_a->data(), cols, *my_value };
         ValueMulFunctor mul_func = { my_array_b->data(), cols, *my_value };
+
+	// we create 2 parallel operations, captured as variables addition1 and additon2,
+	// which are not started until addition1 and addition2 are either destructed or waited for (cf previous exemples)
+	// or enqueued in an exection stream queue, as in this particular exemple.
         auto addition1 = onika::parallel::block_parallel_for(
                          rows
                        , add_func
-                       , parallel_execution_context(0) // requires an execution in the execution stream #0
-                       , enable_gpu                    // enable or disable GPU execution
-                       , true                          // request asynchronous execution
+                       , parallel_execution_context("add") // optional tag "add" may help analysis with profiling tools
+                       , enable_gpu                        // enable or disable GPU execution
+                       , true                              // request asynchronous execution
                        );
         auto addition2 = onika::parallel::block_parallel_for(
                          rows
                        , add_func
-                       , parallel_execution_context(0) // execution in stream #0 will happen after addition1 operation
-                       , enable_gpu                    // enable or disable GPU execution
-                       , true                          // request asynchronous execution
+                       , parallel_execution_context("add") // optional tag "add" may help analysis with profiling tools
+                       , enable_gpu                        // enable or disable GPU execution
+                       , true                              // request asynchronous execution
                        );
-        auto multiply = onika::parallel::block_parallel_for(
+	// addition1 and addition2 operations are sequentially enqueued in stream #0,
+	// and their execution potentially starts right after this line.
+	// execution stream queue object is captured in addition_queue variable allowing for stream control
+	auto addition_queue = parallel_execution_stream(0) << addition1 << addition2 ;
+
+	// we now create a third operation, captured in variable multiply we want to execute concurrently
+	// with two others.
+	auto multiply = onika::parallel::block_parallel_for(
                          rows
                        , func
-                       , parallel_execution_context(1) // execution in stream #1 runs concurrently with those in stream #0
-                       , enable_gpu                    // enable or disable GPU execution
-                       , true                          // request asynchronous execution
+                       , parallel_execution_context("mul") // optional tag "mul" may help analysis with profiling tools
+                       , enable_gpu                        // enable or disable GPU execution
+                       , true                              // request asynchronous execution
                        );
+	// to do so, we enqueue this operation in a different execution stream, stream #1,
+	// which execution queue is captured in variable multiply_queue.
+	auto multiply_queue = parallel_execution_stream(0) << multiply ;
 
 	std::cout << "Meanwhile, the parallel operation is executing..." << std::endl;
-        control->wait();                               // wait for the operation to complete and results to be ready to read
-        std::cout << "Parallel operation completed!" << std::endl;
+        addition_queue->wait(); // wait for all operations in stream #0 to complete
+	multiply_queue->wait(); // wait for all operations in stream #1 to complete
+        std::cout << "All parallel operations completed !" << std::endl;
       }
     };
   }
