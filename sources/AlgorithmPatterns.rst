@@ -117,22 +117,39 @@ In the following example, we are still using the simplest version of `block_para
   {
     class MyValueAdd : public OperatorNode
     {
-      ADD_SLOT(Array2D, my_array, INPUT, REQUIRED);
+      ADD_SLOT(Array2D, my_array_a, INPUT_OUTPUT, REQUIRED);
+      ADD_SLOT(Array2D, my_array_b, INPUT_OUTPUT, REQUIRED);
       ADD_SLOT(double, my_value, INPUT, 1.0);
   public:
       inline void execute() override final {
         size_t cols = my_array->columns();
         size_t rows = my_array->rows();
         bool enable_gpu = (cols * rows) > 1000;     // enable GPU execution only if the matrix has more than 1000 values
-        ValueAddFunctor func = { my_array->data(), cols, *my_value };
-        auto control = onika::parallel::block_parallel_for(
+        ValueAddFunctor add_func = { my_array_a->data(), cols, *my_value };
+        ValueMulFunctor mul_func = { my_array_b->data(), cols, *my_value };
+        auto addition1 = onika::parallel::block_parallel_for(
                          rows
-                       , func
-                       , parallel_execution_context()
+                       , add_func
+                       , parallel_execution_context(0) // requires an execution in the execution stream #0
                        , enable_gpu                    // enable or disable GPU execution
                        , true                          // request asynchronous execution
                        );
-        std::cout << "Meanwhile, the parallel operation is executing..." << std::endl;
+        auto addition2 = onika::parallel::block_parallel_for(
+                         rows
+                       , add_func
+                       , parallel_execution_context(0) // execution in stream #0 will happen after addition1 operation
+                       , enable_gpu                    // enable or disable GPU execution
+                       , true                          // request asynchronous execution
+                       );
+        auto multiply = onika::parallel::block_parallel_for(
+                         rows
+                       , func
+                       , parallel_execution_context(1) // execution in stream #1 runs concurrently with those in stream #0
+                       , enable_gpu                    // enable or disable GPU execution
+                       , true                          // request asynchronous execution
+                       );
+
+	std::cout << "Meanwhile, the parallel operation is executing..." << std::endl;
         control->wait();                               // wait for the operation to complete and results to be ready to read
         std::cout << "Parallel operation completed!" << std::endl;
       }
