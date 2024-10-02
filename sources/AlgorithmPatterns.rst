@@ -124,9 +124,9 @@ which has the side effect of launching and waiting for the completion of created
 
 .. code-block:: cpp
 
-  namespace exaStamp 
+  namespace tutorial 
   {
-    class MyValueAdd : public OperatorNode
+    class AsyncBlockParallelSample : public OperatorNode
     {
         ADD_SLOT(Array2D, my_array, INPUT, REQUIRED);
 	ADD_SLOT(double, my_value, INPUT, 1.0);
@@ -171,63 +171,53 @@ In the following example, we demonstrate how to run several parallel operations 
 
 .. code-block:: cpp
 
-  namespace exaStamp 
+namespace tutorial
+{
+  using namespace exanb;
+  class ConcurrentBlockParallelSample : public OperatorNode
   {
-    class MyValueAdd : public OperatorNode
+    ADD_SLOT(Array2D, array1, INPUT_OUTPUT, REQUIRED);
+    ADD_SLOT(Array2D, array2, INPUT_OUTPUT, REQUIRED);
+    ADD_SLOT(double, value, INPUT, 1.0);
+    public:
+    inline void execute() override final
     {
-      ADD_SLOT(Array2D, my_array_a, INPUT_OUTPUT, REQUIRED);
-      ADD_SLOT(Array2D, my_array_b, INPUT_OUTPUT, REQUIRED);
-      ADD_SLOT(double, my_value, INPUT, 1.0);
-  public:
-      inline void execute() override final {
-        size_t cols = my_array->columns();
-        size_t rows = my_array->rows();
-        bool enable_gpu = (cols * rows) > 1000;     // enable GPU execution only if the matrix has more than 1000 values
-        ValueAddFunctor add_func = { my_array_a->data(), cols, *my_value };
-        ValueMulFunctor mul_func = { my_array_b->data(), cols, *my_value };
+      using onika::parallel::block_parallel_for;
+      // if array1 is empty, allocate it
+      if( array1->rows() == 0 || array1->columns() == 0 ) { array1->resize( 1024 , 1024 ); }
+      // if array2 is empty, allocate it
+      if( array2->rows() == 0 || array2->columns() == 0 ) { array2->resize( 1024 , 1024 ); }
+      // functor to add the same value to all elements of array1    
+      BlockParallelValueAddFunctor array1_add_func = { *array1 // refernce our data array through its pointer and size
+                                                     , *value // value to add to the elements of the array
+                                                     };
+      // functor to add the same value to all elements of array2
+      BlockParallelValueAddFunctor array2_add_func = { *array2, *value };
+      // Launching the parallel operation, which can execute on GPU if the execution context allows
+      // result of parallel operation construct is captured into variable 'my_addition',
+      // thus it can be scheduled in a stream queue for asynchronous execution rather than being executed right away
+      auto addition1 = block_parallel_for( array1->rows()  // number of iterations, parallelize at the first level over rows
+                                         , array1_add_func // the function to call in parallel
+                                         , parallel_execution_context("add_kernel") // execution environment inherited from this OperatorNode
+                                         ); // optionally, we may tag here ^^^ parallel operation for debugging/profiling purposes
+      // we create a second parallel operation we want to execute sequentially after the first addition
+      auto addition2 = block_parallel_for( array1->rows(), array1_add_func, parallel_execution_context("add_kernel") );
+      // we finally create a third parallel operation we want to execute concurrently with the two others
+      auto addition3 = block_parallel_for( array2->rows(), array2_add_func, parallel_execution_context("add_kernel") );
+      // addition1 and addition2 are scheduled asyncronously and sequentially one after the other, int the stream queue #0
+      auto stream_0_control = parallel_execution_stream(0) << std::move(addition1) << std::move(addition2) ;
+      // addition3 is scheduled asynchrounsly in stream queue #1, thus it may run concurrently with operations in stream quaue #0
+      auto stream_1_control = parallel_execution_stream(1) << std::move(addition3) ;
+      lout << "Parallel operations are executing..." << std::endl;
+      stream_0_control.wait(); // wait for all operations in stream queue #0 to complete
+      stream_1_control.wait(); // wait for all operations in stream queue #1 to complete
+      lout << "All parallel operations have terminated !" << std::endl;
+    }
+  };
+}
 
-	// we create 2 parallel operations, captured as variables addition1 and additon2,
-	// which are not started until addition1 and addition2 are either destructed or waited for (cf previous exemples)
-	// or enqueued in an exection stream queue, as in this particular exemple.
-        auto addition1 = onika::parallel::block_parallel_for(
-                         rows
-                       , add_func
-                       , parallel_execution_context("add") // optional tag "add" may help analysis with profiling tools
-                       , enable_gpu                        // enable or disable GPU execution
-                       , true                              // request asynchronous execution
-                       );
-        auto addition2 = onika::parallel::block_parallel_for(
-                         rows
-                       , add_func
-                       , parallel_execution_context("add") // optional tag "add" may help analysis with profiling tools
-                       , enable_gpu                        // enable or disable GPU execution
-                       , true                              // request asynchronous execution
-                       );
-	// addition1 and addition2 operations are sequentially enqueued in stream #0,
-	// and their execution potentially starts right after this line.
-	// execution stream queue object is captured in addition_queue variable allowing for stream control
-	auto addition_queue = parallel_execution_stream(0) << addition1 << addition2 ;
-
-	// we now create a third operation, captured in variable multiply we want to execute concurrently
-	// with two others.
-	auto multiply = onika::parallel::block_parallel_for(
-                         rows
-                       , func
-                       , parallel_execution_context("mul") // optional tag "mul" may help analysis with profiling tools
-                       , enable_gpu                        // enable or disable GPU execution
-                       , true                              // request asynchronous execution
-                       );
-	// to do so, we enqueue this operation in a different execution stream, stream #1,
-	// which execution queue is captured in variable multiply_queue.
-	auto multiply_queue = parallel_execution_stream(0) << multiply ;
-
-	std::cout << "Meanwhile, the parallel operation is executing..." << std::endl;
-        addition_queue->wait(); // wait for all operations in stream #0 to complete
-	multiply_queue->wait(); // wait for all operations in stream #1 to complete
-        std::cout << "All parallel operations completed !" << std::endl;
-      }
-    };
-  }
+The corresponding complete exemple in exaNBody source tree is here :
+`concurrent_block_parallel.cpp <https://github.com/Collab4exaNBody/exaNBody/blob/main/src/exanb/tutorial/concurrent_block_parallel.cpp>`_
 
 
 Compute Cell Particles
