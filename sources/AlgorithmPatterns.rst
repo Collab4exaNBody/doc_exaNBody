@@ -35,27 +35,26 @@ Before calling `block_parallel_for`, it is necessary to define the functor (the 
 
 .. code-block:: cpp
 
-  namespace exaStamp
+namespace tutorial
+{
+  using namespace exanb;
+  // a functor = function applied in parallel
+  // it is defined by a class (or struct) with the call operator ()
+  struct BlockParallelValueAddFunctor
   {
-    using namespace exanb;
-    // a functor = function applied in parallel
-    // it is defined by a class (or struct) with the call operator ()
-    struct ValueAddFunctor
-    {
-      double **array;      // our 2D array
-      size_t columns;      // number of columns in our array
-      double m_value_to_add; // value to add
-     
-      ONIKA_HOST_DEVICE_FUNC       // works on CPU and GPU
-      void operator () (size_t i)  // call operator with i in [0;n[
-      {                            // a whole block (all its threads) execute iteration i
-        ONIKA_CU_BLOCK_SIMD_FOR(size_t, j, 0, columns)  // parallelization among the threads of the current block
-        {                                               // for iterations on j in [0;columns[
-          array[i][j] += m_value_to_add;               // each thread executes 0, 1, or multiple iterations of j
-        }
+    Array2DReference m_array;
+    double m_value_to_add = 0.0; // value to add
+    ONIKA_HOST_DEVICE_FUNC            // works on CPU and GPU
+    void operator () (size_t i) const // call operator with i in [0;n[
+    {                                 // a whole block (all its threads) execute iteration i
+      const size_t cols = m_array.columns();
+      ONIKA_CU_BLOCK_SIMD_FOR(size_t, j, 0, cols)   // parallelization among the threads of the current block
+      {                                             // for iterations on j in [0;columns[
+	m_array[i][j] += m_value_to_add; // each thread executes 0, 1, or multiple iterations of j
       }
-    };
-  }
+    }
+  };
+}
 
 
 - `ONIKA_CU_BLOCK_SIMD_FOR`: Defines a macro that facilitates the use of the second level of parallelism within threads of the same `CUDA` block.
@@ -68,42 +67,48 @@ Next, we need to inform the compiler whether our functor is compatible with `CUD
 
 .. code-block:: cpp
 
-  namespace onika
+namespace onika
+{
+  namespace parallel
   {
-    namespace parallel
+    template<>
+    struct BlockParallelForFunctorTraits<tutorial::BlockParallelValueAddFunctor>
     {
-      template<>
-      struct BlockParallelForFunctorTraits<ValueAddFunctor>
-      {
-        static constexpr bool CudaCompatible = true; // or false to prevent the code from being compiled with CUDA
-      };
-    }
+      static constexpr bool CudaCompatible = true; // or false to prevent the code from being compiled with CUDA
+    };
   }
+}
 
 The final step is to launch the parallel operation in the code of our component:
 
 .. code-block:: cpp
 
-  namespace exaStamp 
+namespace tutorial
+{
+  using namespace exanb;
+  class SynchronousBlockParallelSample : public OperatorNode
   {
-    class MyValueAdd : public OperatorNode
+    ADD_SLOT(Array2D, my_array, INPUT_OUTPUT, REQUIRED);
+    ADD_SLOT(double, my_value, INPUT, 1.0);
+    public:
+    inline void execute() override final
     {
-      ADD_SLOT(Array2D, my_array, INPUT_OUTPUT, REQUIRED);
-      ADD_SLOT(double, my_value, INPUT, 1.0);
-      public:
-      inline void execute() override final {
-        ValueAddFunctor func = { my_array->data()     // data of our array (double**), initializes the 'array' member of our functor
-                               , my_array->columns()  // number of columns in our 2D array
-                               , *my_value };         // value to add to the elements of the array
-        // Launching the parallel operation, which can execute on GPU if the execution context allows
-        onika::parallel::block_parallel_for(my_array->rows()             // number of iterations, parallelize at the first level over rows
-                                           , func                         // the function to call in parallel
-                                           , parallel_execution_context() // returns the parallel execution context associated with this component
-                                           );
+      using onika::parallel::block_parallel_for;
+      if( my_array->rows() == 0 || my_array->columns() == 0 )
+      {
+        my_array->resize( 1024 , 1024 );
       }
-    };
-  }
-
+      BlockParallelValueAddFunctor value_add_func = { *my_array // refernce our data array through its pointer and size
+                                                    , *my_value // value to add to the elements of the array
+                                                    };                            
+      // Launching the parallel operation, which can execute on GPU if the execution context allows
+      block_parallel_for( my_array->rows()             // number of iterations, parallelize at the first level over rows
+                        , value_add_func               // the function to call in parallel
+                        , parallel_execution_context() // returns the parallel execution context associated with this component
+                        );
+    }
+  };
+}
 
 
 Asynchronous parallel execution
