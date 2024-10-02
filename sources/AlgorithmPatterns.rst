@@ -67,49 +67,51 @@ Next, we need to inform the compiler whether our functor is compatible with `CUD
 
 .. code-block:: cpp
 
-namespace onika
-{
-  namespace parallel
-  {
-    template<>
-    struct BlockParallelForFunctorTraits<tutorial::BlockParallelValueAddFunctor>
-    {
-      static constexpr bool CudaCompatible = true; // or false to prevent the code from being compiled with CUDA
-    };
-  }
-}
+	namespace onika
+	{
+	  namespace parallel
+	  {
+	    template<>
+	    struct BlockParallelForFunctorTraits<tutorial::BlockParallelValueAddFunctor>
+	    {
+	      static constexpr bool CudaCompatible = true; // or false to prevent the code from being compiled with CUDA
+	    };
+	  }
+	}
 
 The final step is to launch the parallel operation in the code of our component:
 
 .. code-block:: cpp
 
-namespace tutorial
-{
-  using namespace exanb;
-  class SynchronousBlockParallelSample : public OperatorNode
-  {
-    ADD_SLOT(Array2D, my_array, INPUT_OUTPUT, REQUIRED);
-    ADD_SLOT(double, my_value, INPUT, 1.0);
-    public:
-    inline void execute() override final
-    {
-      using onika::parallel::block_parallel_for;
-      if( my_array->rows() == 0 || my_array->columns() == 0 )
-      {
-        my_array->resize( 1024 , 1024 );
-      }
-      BlockParallelValueAddFunctor value_add_func = { *my_array // refernce our data array through its pointer and size
-                                                    , *my_value // value to add to the elements of the array
-                                                    };                            
-      // Launching the parallel operation, which can execute on GPU if the execution context allows
-      block_parallel_for( my_array->rows()             // number of iterations, parallelize at the first level over rows
-                        , value_add_func               // the function to call in parallel
-                        , parallel_execution_context() // returns the parallel execution context associated with this component
-                        );
-    }
-  };
-}
+	namespace tutorial
+	{
+	  using namespace exanb;
+	  class SynchronousBlockParallelSample : public OperatorNode
+	  {
+	    ADD_SLOT(Array2D, my_array, INPUT_OUTPUT, REQUIRED);
+	    ADD_SLOT(double, my_value, INPUT, 1.0);
+	    public:
+	    inline void execute() override final
+	    {
+	      using onika::parallel::block_parallel_for;
+	      if( my_array->rows() == 0 || my_array->columns() == 0 )
+	      {
+	        my_array->resize( 1024 , 1024 );
+	      }
+	      BlockParallelValueAddFunctor value_add_func = { *my_array // refernce our data array through its pointer and size
+	                                                    , *my_value // value to add to the elements of the array
+	                                                    };                            
+	      // Launching the parallel operation, which can execute on GPU if the execution context allows
+	      block_parallel_for( my_array->rows()             // number of iterations, parallelize at the first level over rows
+	                        , value_add_func               // the function to call in parallel
+	                        , parallel_execution_context() // returns the parallel execution context associated with this component
+	                        );
+	    }
+	  };
+	}
 
+The corresponding complete exemple is in exaNBody source tree and compiled, ready to be tested, and is linked here after :
+`synchronous_block_parallel.cpp <https://github.com/Collab4exaNBody/exaNBody/blob/main/src/exanb/tutorial/synchronous_block_parallel.cpp>`_
 
 Asynchronous parallel execution
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
