@@ -116,7 +116,11 @@ The corresponding complete exemple is in exaNBody source tree and compiled, read
 Asynchronous parallel execution
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In the following example, we are still using the simplest version of `block_parallel_for`. Optional parameters can be added to control asynchronicity or even disable execution on the `GPU`.
+In the following example, we are still using the simplest version of `block_parallel_for`,
+but we want to trigger parallel execution asynchrounsly (running in the background), and explicitly wait for completion later on.
+To this end, we capture object returned by block_parallel_for, of type ParallelExecutionWrapper, to handle its synchronization manually.
+When this object is not captured in a variable, it is therefor destructed right after termination of block_parallel_for,
+which has the side effect of launching and waiting for the completion of created parallel operation.
 
 .. code-block:: cpp
 
@@ -124,30 +128,36 @@ In the following example, we are still using the simplest version of `block_para
   {
     class MyValueAdd : public OperatorNode
     {
-      ADD_SLOT(Array2D, my_array, INPUT, REQUIRED);
-      ADD_SLOT(double, my_value, INPUT, 1.0);
-  public:
-      inline void execute() override final {
-        size_t cols = my_array->columns();
-        size_t rows = my_array->rows();
-        bool enable_gpu = (cols * rows) > 1000;     // enable GPU execution only if the matrix has more than 1000 values
-        ValueAddFunctor func = { my_array->data(), cols, *my_value };
-        auto control = onika::parallel::block_parallel_for(
-                         rows
-                       , func
-                       , parallel_execution_context()
-                       , enable_gpu                    // enable or disable GPU execution
-                       , true                          // request asynchronous execution
-                       );
-        std::cout << "Meanwhile, the parallel operation is executing..." << std::endl;
-        control->wait();                               // wait for the operation to complete and results to be ready to read
-        std::cout << "Parallel operation completed!" << std::endl;
+        ADD_SLOT(Array2D, my_array, INPUT, REQUIRED);
+	ADD_SLOT(double, my_value, INPUT, 1.0);
+    public:
+      inline void execute() override final
+      {
+        using onika::parallel::block_parallel_for;
+        if( my_array->rows() == 0 || my_array->columns() == 0 ) { my_array->resize( 1024 , 1024 ); }
+        BlockParallelValueAddFunctor value_add_func = { *my_array // refernce our data array through its pointer and size
+						    , *my_value // value to add to the elements of the array
+						    };
+        // Launching the parallel operation, which can execute on GPU if the execution context allows
+        // result of parallel operation construct is captured into variable 'my_addition',
+        // thus it can be scheduled in a stream queue for asynchronous execution rather than being executed right away
+        auto my_addition = block_parallel_for( my_array->rows() // number of iterations, parallelize at the first level over rows
+  					     , value_add_func   // the function to call in parallel
+	  				     , parallel_execution_context("my_add_kernel") // execution environment inherited from this OperatorNode
+		  			     ); // optionally, we may tag here ^^^ parallel operation for debugging/profiling purposes
+        // my_addition is scheduled here, transfering its content/ownership (see std::move) to the default stream queue
+        auto stream_control = parallel_execution_stream() << std::move(my_addition) ;
+        lout << "Parallel operation is executing..." << std::endl;
+        stream_control.wait();                               // wait for the operation to complete and results to be ready to read
+        lout << "Parallel operation has completed !" << std::endl;
       }
     };
   }
 
 
 If the execution context allows it, the parallel operation will proceed in the background, occupying either the free threads (other than those executing this code) or the `GPU`. This can be very useful, especially for overlapping computations and `MPI` message sends. 
+The corresponding complete exemple in exaNBody source tree is here :
+`async_block_parallel.cpp <https://github.com/Collab4exaNBody/exaNBody/blob/main/src/exanb/tutorial/async_block_parallel.cpp>`_
 
 .. warning::
 
