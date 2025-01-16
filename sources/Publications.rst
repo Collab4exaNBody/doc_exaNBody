@@ -8,6 +8,8 @@ Carrard, T., Prat, R., Latu, G., Babilotte, K., Lafourcade, P., Amarsid, L., & S
 
 Field High Performance Computing:
 
+Babilotte, K., Dubois, A., Carrard, T., Lafourcade, P., Videau, L., Molinari, J. F., & Soulard, L. (2025). On-the-fly clustering for exascale molecular dynamics simulations. Computer Physics Communications, 307, 109427. cite:`babilotte2025on` 
+
 Carrard, T., Prat, R., Latu, G., Babilotte, K., Lafourcade, P., Amarsid, L., & Soulard, L. (2023). ExaNBody: a HPC framework for N-Body applications. :cite:`Carrard_2024`
 
 Prat, R., Carrard, T., Soulard, L., Durand, O., Namyst, R., & Colombet, L. (2020). AMR-based molecular dynamics for non-uniform, highly dynamic particle simulations. Computer Physics Communications, 253, 107177. :cite:`prat2020amr` 
@@ -20,6 +22,8 @@ Cieren, E., Colombet, L., Pitoiset, S., & Namyst, R. (2014). ExaStamp: A paralle
 
 
 Field Physics / Molecular Dynamics:
+
+Lafourcade, P., Ewald, G., Carrard, T., & Denoual, C. (2025). Extraction of slip systems and twinning variants from a Lagrangian analysis of molecular dynamics simulations. Mechanics of Materials, 200, 105189. :cite:`Lafourcade2025extraction` 
 
 Soulard, L., Durand, O., Burie, J. R., & Babilotte, K. (2024). Micro-jetting: Areal density calculation from a triangular groove. Journal of Applied Physics, 135(20). :cite:`soulard2024micro`
 
