@@ -101,6 +101,15 @@ To utilize this additional storage, you need to use the data structure *ExtraDyn
   onika::memory::CudaMMVector<InfoType> m_info; /**< Info vector storing indices of the [start, number of items, particle id] of each cell's extra dynamic data in m_data. */
   onika::memory::CudaMMVector<ItemType> m_data; /**< Data vector storing the extra dynamic data for each cell. */
 
+With the data structure `ExtraStorageInfo`:
+
+.. code-block:: cpp
+
+  using UIntType = uint64_t;
+  UIntType offset; ///< start / offset 
+  UIntType size;  ///< number of items
+  uint64_t pid;    ///< Particle Id
+
 The filling of these data structures is your responsibility; however, it is possible to instantiate an operator to verify that the filling has been done correctly:
 
 .. code-block:: cpp
